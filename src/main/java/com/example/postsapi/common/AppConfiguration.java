@@ -3,6 +3,7 @@ package com.example.postsapi.common;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfiguration {
@@ -14,7 +15,7 @@ public class AppConfiguration {
     private String jsonPlaceHolderUrl;
 
     @Bean
-    public String getAppName(){
+    public String getAppName() {
         return appName;
     }
 
