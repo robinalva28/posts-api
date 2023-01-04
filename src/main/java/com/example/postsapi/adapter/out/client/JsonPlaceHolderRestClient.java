@@ -33,4 +33,13 @@ public class JsonPlaceHolderRestClient {
         return (response.getStatusCode().is2xxSuccessful()) ? response.getBody() : List.of();
     }
 
+    public List<CommentEntitiesResponse> getCommentEntities() {
+        String uri = getJsonPlaceHolderUrl + "/comments";
+
+        log.info("RestClient: Executing getCommentEntities...");
+        ResponseEntity<List<CommentEntitiesResponse>> response = restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+
+        return (response.getStatusCode().is2xxSuccessful()) ? response.getBody() : List.of();
+    }
+
 }

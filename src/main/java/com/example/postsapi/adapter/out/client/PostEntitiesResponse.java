@@ -1,9 +1,11 @@
 package com.example.postsapi.adapter.out.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class PostEntitiesResponse {
     @JsonProperty("userId")
     private Long userId;
@@ -13,5 +15,4 @@ public class PostEntitiesResponse {
     private String title;
     @JsonProperty("body")
     private String body;
-
 }

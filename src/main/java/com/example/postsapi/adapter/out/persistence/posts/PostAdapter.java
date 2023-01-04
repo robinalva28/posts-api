@@ -1,10 +1,13 @@
 package com.example.postsapi.adapter.out.persistence.posts;
 
 import com.example.postsapi.adapter.out.client.JsonPlaceHolderRestClient;
+import com.example.postsapi.adapter.out.client.PostEntitiesResponse;
 import com.example.postsapi.application.port.out.PostPort;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class PostAdapter implements PostPort {
@@ -19,10 +22,8 @@ public class PostAdapter implements PostPort {
     }
 
     @Override
-    public Object getAllPosts() {
+    public List<PostEntitiesResponse> getAllPosts() {
         log.info("Adapter: requesting restClient...");
-        var result = jsonPlaceHolderRestClient.getPostEntities();
-
-        return result;
+        return jsonPlaceHolderRestClient.getPostEntities();
     }
 }
