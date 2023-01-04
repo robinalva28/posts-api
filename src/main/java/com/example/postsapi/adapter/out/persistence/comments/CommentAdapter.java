@@ -1,10 +1,13 @@
 package com.example.postsapi.adapter.out.persistence.comments;
 
+import com.example.postsapi.adapter.out.client.CommentEntitiesResponse;
 import com.example.postsapi.adapter.out.client.JsonPlaceHolderRestClient;
 import com.example.postsapi.application.port.out.CommentPort;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class CommentAdapter implements CommentPort {
@@ -19,8 +22,14 @@ public class CommentAdapter implements CommentPort {
     }
 
     @Override
+    public List<CommentEntitiesResponse> getAllCommentsFromApi() {
+        log.info("Adapter: requesting restClient...");
+        return jsonPlaceHolderRestClient.getCommentEntities();
+    }
+
+    @Override
     public Object getAllcomments() {
         log.info("Adapter: requesting restClient...");
-        return jsonPlaceHolderRestClient.getPostEntities();
+        return List.of();
     }
 }
