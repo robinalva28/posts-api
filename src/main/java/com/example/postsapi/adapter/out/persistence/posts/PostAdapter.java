@@ -15,15 +15,24 @@ public class PostAdapter implements PostPort {
     final Logger log = Logger.getLogger(PostAdapter.class);
 
     private final JsonPlaceHolderRestClient jsonPlaceHolderRestClient;
+    private final PostRepository postRepository;
 
     @Autowired
-    public PostAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient) {
+    public PostAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient, PostRepository postRepository) {
         this.jsonPlaceHolderRestClient = jsonPlaceHolderRestClient;
+        this.postRepository = postRepository;
     }
 
     @Override
-    public List<PostEntitiesResponse> getAllPosts() {
+    public List<PostEntitiesResponse> getAllPostsFromApi() {
         log.info("Adapter: requesting restClient...");
         return jsonPlaceHolderRestClient.getPostEntities();
+    }
+
+    @Override
+    public List<PostEntity> getAllPosts() {
+        //TODO Obtain all posts from db, map to domain object and return to the view, then apply pagination
+        var response = postRepository.getAllByBodyIsTrue();
+        return List.of();
     }
 }

@@ -1,4 +1,9 @@
 package com.example.postsapi.adapter.out.persistence.posts;
 
-public class PostRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface PostRepository extends MongoRepository<PostEntity, String> {
+
+    PostEntity getAllByBodyIsTrue();
+
 }
