@@ -10,9 +10,23 @@ public class AppConfiguration {
     @Value("${springboot.application.name}")
     private String appName;
 
+    @Value("${jsonplaceholder.base-url}")
+    private String jsonPlaceHolderUrl;
+
     @Bean
     public String getAppName(){
         return appName;
     }
+
+    @Bean
+    public String getJsonPlaceHolderUrl() {
+        return jsonPlaceHolderUrl;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
 
 }
