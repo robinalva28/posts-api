@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class PostEntitiesResponse {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("userId")
     private Long userId;
     @JsonProperty("title")
@@ -24,5 +26,9 @@ public class PostEntitiesResponse {
 
     public String getBody() {
         return body;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
