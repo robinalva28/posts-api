@@ -9,4 +9,6 @@ public interface PostPort {
     List<PostEntitiesResponse> getAllPostsFromApi();
 
     List<Post> getAllPosts(Integer offset, Integer limit);
+
+    Post getPostById(Long id);
 }
