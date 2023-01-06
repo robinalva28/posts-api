@@ -53,4 +53,17 @@ public class PostAdapter implements PostPort {
         }
         return postMapper.entityToDomain(result);
     }
+
+    @Override
+    public List<Post> getPostsByTitle(String title) {
+        var result = postRepository.getByTitle(title).orElse(null);
+
+        if(result == null){
+            return null;
+        }
+
+        return result.stream()
+                .map(postMapper::entityToDomain)
+                .toList();
+    }
 }

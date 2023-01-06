@@ -11,4 +11,6 @@ public interface PostPort {
     List<Post> getAllPosts(Integer offset, Integer limit);
 
     Post getPostById(Long id);
+
+    List<Post> getPostsByTitle(String title);
 }
