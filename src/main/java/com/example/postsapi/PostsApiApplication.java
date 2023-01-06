@@ -1,11 +1,11 @@
 package com.example.postsapi;
 
-import com.example.postsapi.adapter.out.persistence.comments.CommentAdapter;
 import com.example.postsapi.adapter.out.persistence.comments.CommentEntity;
 import com.example.postsapi.adapter.out.persistence.comments.CommentRepository;
-import com.example.postsapi.adapter.out.persistence.posts.PostAdapter;
 import com.example.postsapi.adapter.out.persistence.posts.PostEntity;
 import com.example.postsapi.adapter.out.persistence.posts.PostRepository;
+import com.example.postsapi.application.port.out.CommentPort;
+import com.example.postsapi.application.port.out.PostPort;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,16 +24,16 @@ public class PostsApiApplication {
 
     @Bean
     CommandLineRunner runner(PostRepository postRepository, CommentRepository commentRepository,
-                             PostAdapter postAdapter, CommentAdapter commentAdapter) {
+                             PostPort postAdapter, CommentPort commentAdapter) {
 
         return args -> {
             var postResult = postAdapter.getAllPostsFromApi();
             var commentResult = commentAdapter.getAllCommentsFromApi();
 
-            var entityList = postResult.stream()
-                    .map(r -> new PostEntity(r.getTitle(), r.getBody(), r.getUserId(), LocalDateTime.now()))
+            var entityList = postResult.parallelStream()
+                    .map(r -> new PostEntity(r.getId(), r.getTitle(), r.getBody(), r.getUserId()))
                     .toList();
-            var commentList = commentResult.stream()
+            var commentList = commentResult.parallelStream()
                     .map(r -> new CommentEntity(r.getName(), r.getEmail(), r.getBody(),r.getPostId(), LocalDateTime.now()))
                     .toList();
 
@@ -43,5 +43,13 @@ public class PostsApiApplication {
             commentRepository.insert(commentList);
         };
     }
-
-}
+    //TODO: find the way to create the bean validator
+    /*@Bean
+    public Validator validator() {
+        return Validation.byProvider(HibernateValidator.class)
+                .configure()
+                .addProperty("hibernate.validator.fail_fast", "true")
+                .buildValidatorFactory()
+                .getValidator();
+    }*/
+   }
