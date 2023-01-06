@@ -3,7 +3,6 @@ package com.example.postsapi.adapter.in.web;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
@@ -21,14 +20,19 @@ public class HealthResource {
     String getAppName;
 
     @RequestMapping(value = "/checkhealth", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String checkHealth() throws JSONException {
+    public String checkHealth() {
 
         log.info("called endpoint --> GET: /checkhealth");
-
+        try{
         return new JSONObject()
                 .put("appName", getAppName)
                 .put("estado", "ok")
                 .toString();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }
