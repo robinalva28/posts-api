@@ -44,4 +44,26 @@ public class PostAdapter implements PostPort {
                 .map(postMapper::entityToDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Post getPostById(Long id) {
+        var result = postRepository.findById(id).orElse(null);
+        if(result == null){
+            return null;
+        }
+        return postMapper.entityToDomain(result);
+    }
+
+    @Override
+    public List<Post> getPostsByTitle(String title) {
+        var result = postRepository.getByTitle(title).orElse(null);
+
+        if(result == null){
+            return null;
+        }
+
+        return result.stream()
+                .map(postMapper::entityToDomain)
+                .toList();
+    }
 }
