@@ -6,6 +6,9 @@ import com.example.postsapi.adapter.out.persistence.posts.PostEntity;
 import com.example.postsapi.adapter.out.persistence.posts.PostRepository;
 import com.example.postsapi.application.port.out.CommentPort;
 import com.example.postsapi.application.port.out.PostPort;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -43,13 +46,13 @@ public class PostsApiApplication {
             commentRepository.insert(commentList);
         };
     }
-    //TODO: find the way to create the bean validator
-    /*@Bean
+
+    @Bean
     public Validator validator() {
         return Validation.byProvider(HibernateValidator.class)
                 .configure()
                 .addProperty("hibernate.validator.fail_fast", "true")
                 .buildValidatorFactory()
                 .getValidator();
-    }*/
+    }
    }
