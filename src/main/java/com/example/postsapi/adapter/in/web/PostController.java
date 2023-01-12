@@ -14,11 +14,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 
 @RestController("/posts")
@@ -44,14 +44,16 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public PostsView getPosts(@RequestParam(value = "offset") Integer offset,
-                              @RequestParam(value = "limit") Integer limit
+    public ResponseEntity<PostsView> getPosts(@RequestParam(value = "offset") Integer offset,
+                                              @RequestParam(value = "limit") Integer limit
     ) {
 
         log.info("call GET /posts -> getPostUseCase...");
         var postList = getPostsUseCase.getPosts(new GetPostsUseCase.GetPostsCommand(offset, limit));
 
-        return new PostsView(postList);
+        var view = new PostsView(postList);
+
+        return ResponseEntity.ok(view);
     }
 
     @GetMapping("/posts/{id}")
@@ -61,12 +63,14 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Post getPostsById(@PathVariable("id") Long id) {
+    public ResponseEntity<Post> getPostsById(@PathVariable("id") Long id) {
         log.info("call GET /post/id -> getPostByIdUseCase...");
 
         GetPostByIdUseCase.GetPostByIdCommand command = new GetPostByIdUseCase.GetPostByIdCommand(id);
 
-        return getPostByIdUseCase.getPostById(command);
+        var view = getPostByIdUseCase.getPostById(command);
+
+        return ResponseEntity.ok(view);
     }
 
     @GetMapping("/posts/search")
@@ -76,10 +80,10 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public PostsView getPostsByTitle(@RequestParam String title) {
+    public ResponseEntity<PostsView> getPostsByTitle(@RequestParam String title) {
         log.info("call GET /post/search -> getPostByTitleUseCase...");
         var result = getPostsByTitleUseCase.getPostsByTitle(new GetPostsByTitleUseCase.GetPostsByTitleCommand(title));
 
-        return new PostsView(result);
+        return ResponseEntity.ok(new PostsView(result));
     }
 }

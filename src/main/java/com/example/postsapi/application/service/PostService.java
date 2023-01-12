@@ -26,9 +26,9 @@ public class PostService implements GetPostsUseCase, GetPostByIdUseCase, GetPost
     public List<Post> getPosts(GetPostsCommand command) {
         log.info("Service: call PostPort's method getAppPost()");
 
-        var responseServ = postAdapter.getAllPosts(command.getOfset(), command.getLimit());
+        var responseServ = postAdapter.getAllPosts(command.getOffset(), command.getLimit());
         if (responseServ.isEmpty()) {
-            throw new NotFoundException("Not found");
+            throw new NotFoundException("Posts not found");
         }
         return responseServ;
     }
@@ -38,8 +38,8 @@ public class PostService implements GetPostsUseCase, GetPostByIdUseCase, GetPost
         log.info("Service: call PostPort's method getPostById()");
 
         var response = postAdapter.getPostById(command.getId());
-        if(response == null){
-            throw new NotFoundException("Not found");
+        if (response == null) {
+            throw new NotFoundException("Post not found by id ".concat(command.getId().toString()));
         }
         return response;
     }
@@ -49,8 +49,8 @@ public class PostService implements GetPostsUseCase, GetPostByIdUseCase, GetPost
         log.info("Service: call PostPort's method getPostByTitle()");
 
         var response = postAdapter.getPostsByTitle(command.getTitle());
-        if(response == null){
-            throw new NotFoundException("Not found");
+        if (response.isEmpty()) {
+            throw new NotFoundException("Not found posts by title ".concat(command.getTitle()));
         }
         return response;
     }
