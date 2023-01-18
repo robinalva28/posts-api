@@ -36,26 +36,26 @@ public class PostController {
         this.getPostsByTitleUseCase = getPostsByTitleUseCase;
     }
 
-    @GetMapping("/posts")
+    @PostMapping
     @Operation(summary = "Posts with pagination", description = "Service that provides a post with pagination")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Posts OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostsView.class))),
+            @ApiResponse(responseCode = "200", description = "Posts OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public ResponseEntity<PostsView> getPosts(@RequestParam(value = "offset") Integer offset,
-                                              @RequestParam(value = "limit") Integer limit
+    public ResponseEntity<Page<Post>> getPosts(@RequestParam(defaultValue = "1") Integer page,
+                                               @RequestParam(defaultValue = "10") Integer pageSize
     ) {
 
         log.info("call GET /posts -> getPostUseCase...");
-        var postList = getPostsUseCase.getPosts(new GetPostsUseCase.GetPostsCommand(offset, limit));
+        var postList = getPostsUseCase.getPosts(new GetPostsUseCase.GetPostsCommand(page, pageSize));
 
-        var view = new PostsView(postList);
 
-        return ResponseEntity.ok(view);
+
+        return ResponseEntity.ok(postList);
     }
 
-    @GetMapping("/posts/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Post by post id", description = "Service that provides a post by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Posts OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostsView.class))),
@@ -72,7 +72,7 @@ public class PostController {
         return ResponseEntity.ok(view);
     }
 
-    @GetMapping("/posts/search")
+    @GetMapping("/search")
     @Operation(summary = "Post by title like", description = "Service that provides a post by its title")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Posts OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostsView.class))),

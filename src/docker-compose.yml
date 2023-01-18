@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: posts
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    ports:
+      - "5332:5432"
+    volumes:
+      - "db:/data/postgres"
+    networks:
+      - db
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
+
+
+
