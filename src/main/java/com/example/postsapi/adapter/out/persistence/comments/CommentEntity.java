@@ -1,12 +1,10 @@
 package com.example.postsapi.adapter.out.persistence.comments;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Data
-@Document(value = "commentitems")
 public class CommentEntity {
     private String name;
     private String email;
