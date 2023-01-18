@@ -6,10 +6,12 @@ import com.example.postsapi.application.port.out.PostPort;
 import com.example.postsapi.domain.Post;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class PostAdapter implements PostPort {
@@ -34,21 +36,26 @@ public class PostAdapter implements PostPort {
     }
 
     @Override
-    public List<Post> getAllPosts(Integer offset, Integer limit) {
-        log.info("PostAdapter: requesting findAll...");
-        var response = postRepository.findAll().stream().skip(offset).limit(limit).toList();
-        if (response.isEmpty()) {
-            return List.of();
-        }
-        return response.stream()
-                .map(postMapper::entityToDomain)
-                .collect(Collectors.toList());
+    public Page<Post> getAllPosts(Integer page, Integer pageSize) {
+
+        Pageable paging = PageRequest.of(page - 1, pageSize);
+
+        var entitiesPage = this.postRepository.findAll(paging);
+
+        return entitiesPage.map(entity -> {
+            Post post = new Post();
+            post.setId(entity.getId());
+            post.setBody(entity.getBody());
+            post.setTitle(entity.getTitle());
+            post.setUserId(entity.getUserId());
+            return post;
+        });
     }
 
     @Override
     public Post getPostById(Long id) {
         var result = postRepository.findById(id).orElse(null);
-        if(result == null){
+        if (result == null) {
             return null;
         }
         return postMapper.entityToDomain(result);
@@ -56,12 +63,11 @@ public class PostAdapter implements PostPort {
 
     @Override
     public List<Post> getPostsByTitle(String title) {
-        var result = postRepository.getByTitle(title).orElse(null);
+        var result = postRepository.findByTitleContainingIgnoreCase(title).orElse(null);
 
-        if(result == null){
+        if (result == null) {
             return null;
         }
-
         return result.stream()
                 .map(postMapper::entityToDomain)
                 .toList();

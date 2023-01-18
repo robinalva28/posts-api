@@ -1,11 +1,9 @@
 package com.example.postsapi;
 
-import com.example.postsapi.adapter.out.persistence.comments.CommentEntity;
-import com.example.postsapi.adapter.out.persistence.comments.CommentRepository;
 import com.example.postsapi.adapter.out.persistence.posts.PostEntity;
 import com.example.postsapi.adapter.out.persistence.posts.PostRepository;
-import com.example.postsapi.application.port.out.CommentPort;
 import com.example.postsapi.application.port.out.PostPort;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.hibernate.validator.HibernateValidator;
@@ -13,12 +11,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
-import java.time.LocalDateTime;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableMongoRepositories
+@EnableJpaRepositories(basePackages = "com.example.postsapi.adapter.out")
 public class PostsApiApplication {
 
     public static void main(String[] args) {
@@ -26,24 +22,19 @@ public class PostsApiApplication {
     }
 
     @Bean
-    CommandLineRunner runner(PostRepository postRepository, CommentRepository commentRepository,
-                             PostPort postAdapter, CommentPort commentAdapter) {
+    @Transactional
+    CommandLineRunner runner(PostRepository postRepository,
+                             PostPort postAdapter) {
 
         return args -> {
             var postResult = postAdapter.getAllPostsFromApi();
-            var commentResult = commentAdapter.getAllCommentsFromApi();
 
             var entityList = postResult.parallelStream()
-                    .map(r -> new PostEntity(r.getId(), r.getTitle(), r.getBody(), r.getUserId()))
-                    .toList();
-            var commentList = commentResult.parallelStream()
-                    .map(r -> new CommentEntity(r.getName(), r.getEmail(), r.getBody(),r.getPostId(), LocalDateTime.now()))
+                    .map(r -> new PostEntity(r.getTitle(), r.getBody(), r.getUserId()))
                     .toList();
 
             postRepository.deleteAll();
-            commentRepository.deleteAll();
-            postRepository.insert(entityList);
-            commentRepository.insert(commentList);
+            postRepository.saveAllAndFlush(entityList);
         };
     }
 
@@ -55,4 +46,4 @@ public class PostsApiApplication {
                 .buildValidatorFactory()
                 .getValidator();
     }
-   }
+}

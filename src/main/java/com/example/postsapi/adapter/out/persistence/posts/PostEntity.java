@@ -1,35 +1,47 @@
 package com.example.postsapi.adapter.out.persistence.posts;
 
-import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
-@Data
-@Document(value = "postitems")
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
+@Entity(name = "Post")
+@Table(name = "post")
 public class PostEntity {
 
+    @Id
+    @SequenceGenerator(
+            name = "post_sequence",
+            sequenceName = "post_sequence"
+    )
+    @GeneratedValue(
+            strategy = SEQUENCE,
+            generator = "post_sequence"
+    )
+    @Column(name = "id", updatable = false)
     private Long id;
+    @Column(name = "title", nullable = false, columnDefinition = "TEXT")
     private String title;
+    @Column(name = "body", nullable = false, columnDefinition = "TEXT")
     private String body;
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
 
-    public PostEntity(Long id,
-                      String title,
+    public PostEntity(String title,
                       String body,
                       Long userId) {
-        this.id = id;
         this.title = title;
         this.body = body;
         this.userId = userId;
+    }
+
+    public PostEntity() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

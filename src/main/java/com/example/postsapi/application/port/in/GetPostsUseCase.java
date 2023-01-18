@@ -5,42 +5,41 @@ import com.example.postsapi.domain.Post;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface GetPostsUseCase {
 
-    List<Post> getPosts(@Valid GetPostsCommand command);
+    Page<Post> getPosts(@Valid GetPostsCommand command);
 
     class GetPostsCommand extends SelfValidate<GetPostsCommand> {
-        @NotNull(message = "offset field cannot be null")
-        @Min(value = 0, message = "offset field must be higher or equal to 0")
-        Integer offset;
+        @NotNull(message = "page field cannot be null")
+        @Min(value = 1, message = "page field must be higher or equal to 1")
+        Integer page;
 
-        @NotNull(message = "limit field cannot be null")
-        @Min(value = 1, message = "limit field must be higher or equal to 1")
-        Integer limit;
+        @NotNull(message = "pageSize field cannot be null")
+        @Min(value = 2, message = "pageSize field must be higher or equal to 2")
+        Integer pageSize;
 
-        public GetPostsCommand(Integer offset, Integer limit) {
-            this.offset = offset;
-            this.limit = limit;
+        public GetPostsCommand(Integer page, Integer pageSize) {
+            this.page = page;
+            this.pageSize = pageSize;
             validateThis();
         }
 
-        public Integer getOffset() {
-            return offset;
+        public Integer getPage() {
+            return page;
         }
 
-        public void setOffset(Integer offset) {
-            this.offset = offset;
+        public void setPage(Integer page) {
+            this.page = page;
         }
 
-        public Integer getLimit() {
-            return limit;
+        public Integer getPageSize() {
+            return pageSize;
         }
 
-        public void setLimit(Integer limit) {
-            this.limit = limit;
+        public void setPageSize(Integer pageSize) {
+            this.pageSize = pageSize;
         }
     }
 
