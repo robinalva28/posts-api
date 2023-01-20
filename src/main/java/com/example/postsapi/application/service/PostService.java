@@ -5,8 +5,10 @@ import com.example.postsapi.application.port.in.GetPostsByTitleUseCase;
 import com.example.postsapi.application.port.in.GetPostsUseCase;
 import com.example.postsapi.application.port.out.PostPort;
 import com.example.postsapi.domain.Post;
+import jakarta.validation.Valid;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.webjars.NotFoundException;
 
@@ -23,10 +25,10 @@ public class PostService implements GetPostsUseCase, GetPostByIdUseCase, GetPost
     }
 
     @Override
-    public List<Post> getPosts(GetPostsCommand command) {
+    public Page<Post> getPosts(@Valid GetPostsCommand command) {
         log.info("Service: call PostPort's method getAppPost()");
 
-        var responseServ = postAdapter.getAllPosts(command.getOffset(), command.getLimit());
+        var responseServ = postAdapter.getAllPosts(command.getPage(), command.getPageSize());
         if (responseServ.isEmpty()) {
             throw new NotFoundException("Posts not found");
         }

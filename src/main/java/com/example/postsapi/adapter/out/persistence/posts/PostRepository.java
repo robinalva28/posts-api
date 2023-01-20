@@ -1,14 +1,10 @@
 package com.example.postsapi.adapter.out.persistence.posts;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends MongoRepository<PostEntity, Long> {
-
-    @Query("{title: {$eq:'?0'}}")
-    Optional<List<PostEntity>> getByTitle(String title);
-
+public interface PostRepository extends JpaRepository<PostEntity, Long> {
+    Optional<List<PostEntity>> findByTitleContainingIgnoreCase(String title);
 }
