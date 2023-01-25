@@ -8,7 +8,7 @@ import java.util.List;
 public interface CommentPort {
 
     List<CommentEntitiesResponse> getAllCommentsFromApi();
-    List<Comment> getCommentsByPostId(Long id);
+    List<Comment> getCommentsByPostId(Long postId);
 
 
 }

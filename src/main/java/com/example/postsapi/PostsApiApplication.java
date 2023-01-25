@@ -37,13 +37,19 @@ public class PostsApiApplication {
                     .map(r -> new PostEntity(r.getTitle(), r.getBody(), r.getUserId()))
                     .toList();
 
+            postRepository.deleteAll();
+            postRepository.saveAllAndFlush(postEntityList);
+
+            var postEntityPersisted = postRepository.findAll();
+
             var commentEntityList = commentResult.parallelStream()
-                    .map(r -> new CommentEntity(r.getName(), r.getEmail(), r.getBody()))
+                    .map(r -> new CommentEntity(r.getName(), r.getEmail(), r.getBody(), postEntityPersisted
+                            .stream()
+                            .filter(p -> (long) p.getId() == r.getPostId()).toList().get(0))
+                    )
                     .toList();
 
-            postRepository.deleteAll();
             commentRepository.deleteAll();
-            postRepository.saveAllAndFlush(postEntityList);
             commentRepository.saveAllAndFlush(commentEntityList);
         };
     }

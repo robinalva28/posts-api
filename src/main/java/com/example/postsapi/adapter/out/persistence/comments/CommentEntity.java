@@ -4,7 +4,7 @@ import com.example.postsapi.adapter.out.persistence.posts.PostEntity;
 import jakarta.persistence.*;
 
 @Entity(name = "Comment")
-@Table(name = "comment")
+@Table(name = "comments")
 public class CommentEntity {
 
     @Id
@@ -19,14 +19,15 @@ public class CommentEntity {
     @Column(name = "body", columnDefinition = "TEXT", nullable = false)
     private String body;
 
-    @ManyToOne(targetEntity = PostEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "postId", referencedColumnName = "id")
-    private PostEntity postEntity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private PostEntity post;
 
-    public CommentEntity(String name, String email, String body) {
+    public CommentEntity(String name, String email, String body, PostEntity post) {
         this.name = name;
         this.email = email;
         this.body = body;
+        this.post = post;
     }
 
     public CommentEntity() {
@@ -65,11 +66,11 @@ public class CommentEntity {
         this.body = body;
     }
 
-    public PostEntity getPostEntity() {
-        return postEntity;
+    public PostEntity getPost() {
+        return post;
     }
 
-    public void setPostEntity(PostEntity postEntity) {
-        this.postEntity = postEntity;
+    public void setPost(PostEntity post) {
+        this.post = post;
     }
 }

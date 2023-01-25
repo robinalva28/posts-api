@@ -34,9 +34,9 @@ public class CommentAdapter implements CommentPort {
     }
 
     @Override
-    public List<Comment> getCommentsByPostId(Long id) {
+    public List<Comment> getCommentsByPostId(Long postId) {
 
-        var resultEntity = commentRepository.findById(id);
+        var resultEntity = commentRepository.findAllByPostId(postId);
 
         var result = resultEntity.stream()
                 .map(commentMapper::entityToDomain)

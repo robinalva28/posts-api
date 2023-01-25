@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Post")
-@Table(name = "post")
+@Table(name = "posts")
 public class PostEntity {
 
     @Id
@@ -23,7 +23,7 @@ public class PostEntity {
     private String title;
     @Column(name = "body", nullable = false, columnDefinition = "TEXT")
     private String body;
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "userId", nullable = false)
     private Long userId;
 
 
