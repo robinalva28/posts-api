@@ -1,28 +1,16 @@
-package com.example.postsapi.domain;
+package com.example.postsapi.domain.views;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-
-@Schema(description = "Data model for post's comments")
-@Setter
-@Getter
-public class Comment {
+public class CommentsView {
     private Long id;
     private String name;
     private String email;
     private String body;
-    private Post post;
 
-    public Comment(Long id, String name, String email, String body, Post post) {
+    public CommentsView(Long id, String name, String email, String body) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.body = body;
-        this.post = post;
-    }
-
-    public Comment() {
     }
 
     public Long getId() {
@@ -56,14 +44,4 @@ public class Comment {
     public void setBody(String body) {
         this.body = body;
     }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
 }
-
-

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 public interface GetPostByIdUseCase {
     Post getPostById(@Valid GetPostByIdCommand command);
 
-    class GetPostByIdCommand extends SelfValidate<GetPostsUseCase.GetPostsCommand> {
+    class GetPostByIdCommand extends SelfValidate<GetPostByIdCommand> {
 
         @NotNull
         @Min(value = 1, message = "the id post must be higher than 1")

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("v1/post")
+@RequestMapping("v1/posts")
 @Tag(name = "Posts")
 public class PostController {
 

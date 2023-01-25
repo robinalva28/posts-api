@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
     Optional<List<PostEntity>> findByTitleContainingIgnoreCase(String title);
+
+    List<PostEntity> findAll();
 }

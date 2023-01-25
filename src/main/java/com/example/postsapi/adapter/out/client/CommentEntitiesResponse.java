@@ -3,13 +3,16 @@ package com.example.postsapi.adapter.out.client;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CommentEntitiesResponse {
-@JsonProperty("name")
+
+    @JsonProperty("id")
+    private Long id;
+    @JsonProperty("name")
     private String name;
-@JsonProperty("email")
+    @JsonProperty("email")
     private String email;
-@JsonProperty("body")
+    @JsonProperty("body")
     private String body;
-@JsonProperty("postId")
+    @JsonProperty("postId")
     private Long postId;
 
 
@@ -27,5 +30,9 @@ public class CommentEntitiesResponse {
 
     public Long getPostId() {
         return postId;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
