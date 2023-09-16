@@ -5,9 +5,11 @@ import com.example.postsapi.domain.Comment;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface GetCommentByPostIdUseCase {
 
     List<Comment> getCommentByPostId(@Valid GetCommentByPostIdCommand command);

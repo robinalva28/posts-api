@@ -27,7 +27,7 @@ public class JsonPlaceHolderRestClient {
     public List<PostEntitiesResponse> getPostEntities() {
         String uri = getJsonPlaceHolderUrl + "/posts";
 
-        log.info("RestClient: Executing getPostEntities...");
+        log.debug("RestClient: Executing getPostEntities...");
         ResponseEntity<List<PostEntitiesResponse>> response = restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
 
         return (response.getStatusCode().is2xxSuccessful()) ? response.getBody() : List.of();
@@ -36,10 +36,9 @@ public class JsonPlaceHolderRestClient {
     public List<CommentEntitiesResponse> getCommentEntities() {
         String uri = getJsonPlaceHolderUrl + "/comments";
 
-        log.info("RestClient: Executing getCommentEntities...");
+        log.debug("RestClient: Executing getCommentEntities...");
         ResponseEntity<List<CommentEntitiesResponse>> response = restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
 
         return (response.getStatusCode().is2xxSuccessful()) ? response.getBody() : List.of();
     }
-
 }

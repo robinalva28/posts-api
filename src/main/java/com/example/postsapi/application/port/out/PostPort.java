@@ -1,6 +1,7 @@
 package com.example.postsapi.application.port.out;
 
 import com.example.postsapi.adapter.out.client.PostEntitiesResponse;
+import com.example.postsapi.domain.Comment;
 import com.example.postsapi.domain.Post;
 import org.springframework.data.domain.Page;
 
@@ -14,4 +15,6 @@ public interface PostPort {
     Post getPostById(Long id);
 
     List<Post> getPostsByTitle(String title);
+
+    List<Comment> getCommentsByPostId(Long postId);
 }

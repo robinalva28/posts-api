@@ -2,8 +2,8 @@ package com.example.postsapi.adapter.out.persistence.comments;
 
 import com.example.postsapi.adapter.out.client.CommentEntitiesResponse;
 import com.example.postsapi.adapter.out.client.JsonPlaceHolderRestClient;
+import com.example.postsapi.adapter.out.persistence.posts.PostAdapter;
 import com.example.postsapi.application.port.out.CommentPort;
-import com.example.postsapi.domain.Comment;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,18 +13,13 @@ import java.util.List;
 @Component
 public class CommentAdapter implements CommentPort {
 
-    final Logger log = Logger.getLogger(com.example.postsapi.adapter.out.persistence.posts.PostAdapter.class);
+    final Logger log = Logger.getLogger(PostAdapter.class);
 
     private final JsonPlaceHolderRestClient jsonPlaceHolderRestClient;
 
-    private final CommentMapper commentMapper;
-    private final CommentRepository commentRepository;
-
     @Autowired
-    public CommentAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient, CommentMapper commentMapper, CommentRepository commentRepository) {
+    public CommentAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient) {
         this.jsonPlaceHolderRestClient = jsonPlaceHolderRestClient;
-        this.commentMapper = commentMapper;
-        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -32,17 +27,4 @@ public class CommentAdapter implements CommentPort {
         log.info("Adapter: requesting restClient...");
         return jsonPlaceHolderRestClient.getCommentEntities();
     }
-
-    @Override
-    public List<Comment> getCommentsByPostId(Long postId) {
-
-        var resultEntity = commentRepository.findAllByPostId(postId);
-
-        var result = resultEntity.stream()
-                .map(commentMapper::entityToDomain)
-                .toList();
-        return result;
-    }
-
-
 }

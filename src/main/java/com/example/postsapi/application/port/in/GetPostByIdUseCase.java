@@ -5,7 +5,9 @@ import com.example.postsapi.domain.Post;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface GetPostByIdUseCase {
     Post getPostById(@Valid GetPostByIdCommand command);
 

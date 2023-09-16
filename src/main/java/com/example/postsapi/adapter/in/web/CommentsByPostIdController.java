@@ -2,6 +2,7 @@ package com.example.postsapi.adapter.in.web;
 
 
 import com.example.postsapi.application.port.in.GetCommentByPostIdUseCase;
+import com.example.postsapi.application.port.in.GetCommentByPostIdUseCase.GetCommentByPostIdCommand;
 import com.example.postsapi.common.exception.GenericError;
 import com.example.postsapi.domain.views.CommentsView;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,21 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("v1/comments")
+@RequestMapping("v1/posts")
+@Tag(name = "Posts")
 @RestController
-@Tag(name = "Comments")
-public class CommentController {
+public class CommentsByPostIdController {
 
-    final Logger log = Logger.getLogger(CommentController.class);
+    final Logger log = Logger.getLogger(CommentsByPostIdController.class);
 
     GetCommentByPostIdUseCase getCommentByPostIdUseCase;
 
     @Autowired
-    public CommentController(GetCommentByPostIdUseCase getCommentByPostIdUseCase) {
+    public CommentsByPostIdController(GetCommentByPostIdUseCase getCommentByPostIdUseCase) {
         this.getCommentByPostIdUseCase = getCommentByPostIdUseCase;
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId}/comments")
     @Operation(summary = "Comments by post id", description = "Service that provides a comment by its postId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comments OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CommentsView.class))),
@@ -44,14 +45,15 @@ public class CommentController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = GenericError.class)))
     })
     public ResponseEntity<List<CommentsView>> getCommentsByPostId(@PathVariable(value = "postId", required = true) Long postId) {
-        log.info("call GET /comment/{postId} -> getCommentByPostIdUseCase...");
+        log.debug("GET /post/{"+postId+"}/comments -> getCommentByPostIdUseCase...");
 
-        GetCommentByPostIdUseCase.GetCommentByPostIdCommand command = new GetCommentByPostIdUseCase.GetCommentByPostIdCommand(postId);
+        GetCommentByPostIdCommand command = new GetCommentByPostIdCommand(postId);
 
         var view = getCommentByPostIdUseCase.getCommentByPostId(command).stream()
                 .map(c -> new CommentsView(c.getId(), c.getName(), c.getEmail(), c.getBody()))
                 .collect(Collectors.toList());
 
+        log.debug("GET /post/{"+postId+"}/comments -> getCommentByPostIdUseCase... DONE");
         return ResponseEntity.ok(view);
     }
 
