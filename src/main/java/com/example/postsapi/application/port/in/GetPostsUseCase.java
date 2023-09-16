@@ -6,14 +6,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface GetPostsUseCase {
 
     Page<Post> getPosts(@Valid GetPostsCommand command);
 
     class GetPostsCommand extends SelfValidate<GetPostsCommand> {
         @NotNull(message = "page field cannot be null")
-        @Min(value = 1, message = "page field must be higher or equal to 1")
+        @Min(value = 1, message = "pageField must be higher or equal to 1")
         Integer page;
 
         @NotNull(message = "pageSize field cannot be null")
@@ -30,17 +32,8 @@ public interface GetPostsUseCase {
             return page;
         }
 
-        public void setPage(Integer page) {
-            this.page = page;
-        }
-
         public Integer getPageSize() {
             return pageSize;
         }
-
-        public void setPageSize(Integer pageSize) {
-            this.pageSize = pageSize;
-        }
     }
-
 }

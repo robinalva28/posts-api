@@ -4,9 +4,11 @@ import com.example.postsapi.common.validation.SelfValidate;
 import com.example.postsapi.domain.Post;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface GetPostsByTitleUseCase {
     List<Post> getPostsByTitle(GetPostsByTitleCommand command);
 

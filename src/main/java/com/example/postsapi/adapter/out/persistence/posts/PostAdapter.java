@@ -2,7 +2,10 @@ package com.example.postsapi.adapter.out.persistence.posts;
 
 import com.example.postsapi.adapter.out.client.JsonPlaceHolderRestClient;
 import com.example.postsapi.adapter.out.client.PostEntitiesResponse;
+import com.example.postsapi.adapter.out.persistence.comments.CommentMapper;
+import com.example.postsapi.adapter.out.persistence.comments.CommentRepository;
 import com.example.postsapi.application.port.out.PostPort;
+import com.example.postsapi.domain.Comment;
 import com.example.postsapi.domain.Post;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +23,22 @@ public class PostAdapter implements PostPort {
 
     private final JsonPlaceHolderRestClient jsonPlaceHolderRestClient;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
     private final PostMapper postMapper;
 
     @Autowired
-    public PostAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient, PostRepository postRepository, PostMapper postMapper) {
+    public PostAdapter(JsonPlaceHolderRestClient jsonPlaceHolderRestClient, PostRepository postRepository, CommentRepository commentRepository, CommentMapper commentMapper, PostMapper postMapper) {
         this.jsonPlaceHolderRestClient = jsonPlaceHolderRestClient;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+        this.commentMapper = commentMapper;
         this.postMapper = postMapper;
     }
 
     @Override
     public List<PostEntitiesResponse> getAllPostsFromApi() {
-        log.info("PostAdapter: requesting restClient...");
+        log.debug("PostAdapter: requesting restClient...");
         return jsonPlaceHolderRestClient.getPostEntities();
     }
 
@@ -70,6 +77,15 @@ public class PostAdapter implements PostPort {
         }
         return result.stream()
                 .map(postMapper::entityToDomain)
+                .toList();
+    }
+    @Override
+    public List<Comment> getCommentsByPostId(Long postId) {
+
+        var resultEntity = commentRepository.findAllByPostId(postId);
+
+        return resultEntity.stream()
+                .map(commentMapper::entityToDomain)
                 .toList();
     }
 }

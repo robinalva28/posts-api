@@ -15,7 +15,7 @@ public class PostsView {
         this.postList = postList;
     }
 
-    public List<Post> getPostList() {
+    public List<Post> getPosts() {
         return postList;
     }
 }

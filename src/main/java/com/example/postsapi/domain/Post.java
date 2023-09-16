@@ -14,7 +14,6 @@ public class Post {
     }
 
     public Post() {
-
     }
 
     public Long getId() {
